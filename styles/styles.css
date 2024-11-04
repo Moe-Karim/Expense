@@ -1,0 +1,89 @@
+body{
+    font-size: larger;
+    background-color: #CED8F1;
+    display: flex;
+    justify-content: space-around;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.menu{
+    background-color: #fefafa8e;
+    border-radius: 10px;
+    height: 95vh;
+    width: 25vw;
+}
+.menu ul{
+    list-style: none;
+    line-height: 64px;
+}
+.menu ul li{
+    text-decoration: none;
+    color: black;
+    letter-spacing: 5px;
+    transition: all 0.7s;
+}
+.menu ul li:hover{
+    color: #ced8f1;
+    cursor: pointer;
+    opacity: 0.5;
+}
+.content{
+    background-color: #fefafa8e;
+    border-radius: 10px;
+    height: 80vh;
+    width: 60vw;
+    transition: all 0.7s;
+}
+.content a{
+    text-decoration: none;
+    color: black;
+    transition: all 0.7s;
+}
+.content a:hover{
+    color: #ced8f1;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0.7;
+}
+.dash{
+    background-color: #fefafa8e;
+    border-radius: 10px;
+    height: 80vh;
+    width: 60vw;
+    transition: all 0.7s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.dash >div{
+    text-align: center;
+    width: 20vw;
+    height: 15vh;
+    background-color: #CED8F1;
+    border-radius: 20px;
+}
+
+.input-hide{
+    margin: 5% 10%;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 80%;
+    height: 80%;
+    align-items: center;
+}
+.input-hide input{
+    height: 30px;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: black;
+    width: 80%;
+    background-color:#CED8F1 ;
+}
+.btn{
+    margin-left: 2vw;
+}
+.btn:hover {
+    color: #ced8f1;
+    cursor: pointer;
+}
