@@ -1,0 +1,26 @@
+.primary-bg-color{
+    background-color: #CED8F1;
+}
+.secondary-bg-color{
+    background-color: #739a747a !important;
+}
+.third-bg-color{
+    background-color:#eb80807e !important;
+
+}
+.fourth-bg-color{
+    background-color: #0078be7d !important;
+
+}
+.primary-txt-color{
+    color: white;
+}
+.secondary-txt-color{
+    color: #739a74;
+}
+.third-txt-color{
+    color:#eb8080;
+}
+.fourth-txt-color{
+    color: #0078BE;
+}

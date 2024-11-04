@@ -3,9 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/utilities.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/colors.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Expense Tracker</title>
 </head>
 <body>
-    
+    <div class="menu">
+        <div class="flex center" >
+            <h1>Menu</h1>
+            </div>
+            <div class="flex column">
+                <ul>
+                    <li>Dashboard</li>
+                    <li>Incomes</li>
+                    <li>Expenses</li>
+                    <li>Transactions</li>
+                </ul>
+            </div>
+    </div>
+
+<div class="content" id="content">
+
+<div class="input-hide" id="input">
+    <form action="#" class="flex column center" id="transaction-form">
+        <input type="number" id="amount" placeholder="Enter amount">
+        <input type="text" id="comment" placeholder="Enter discription">
+        <input type="date" placeholder="Date" id="date">
+        <div class="flex center space-evenly" id="trans-method" name="trans-method">
+            <div class="flex center">
+                <label for="income">Income</label>
+                <input type="radio" id="income" value="income" name="trans-method">
+            </div>
+            <div class="flex center">
+                <label for="expense">Expence</label>
+                <input type="radio" id="expense" value="expense" name="trans-method">
+            </div>
+        </div>
+        <input type="button" id="submit" value="Add Transaction">
+
+    </form>
+
+
+</div>
+</div>
+
+<script src="./scripts/script.js"></script>
 </body>
 </html>
