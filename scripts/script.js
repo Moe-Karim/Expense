@@ -95,3 +95,42 @@ function updateContent(Selected) {
         attachButtonListeners();
     }
 }
+function attachButtonListeners() {
+    storage.forEach((item, index) => {
+        const deleteButton = document.getElementById(`delete-${index}`);
+
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                deleteTransaction(index);
+            });
+        }
+    });
+}
+
+document.getElementById('submit').addEventListener('click', () => {
+    const selectedMethod = document.querySelector('input[name="trans-method"]:checked');
+    const amount = document.getElementById('amount').value;
+    const description = document.getElementById('comment').value;
+    const date = document.getElementById('date').value;
+
+    if (selectedMethod && amount && description && date) {
+        const transaction = {
+            type: selectedMethod.value,
+            amount: parseFloat(amount),
+            description: description,
+            date: date,
+        };
+
+        storage.push(transaction);
+        localStorage.setItem('transactions', JSON.stringify(storage));
+
+        document.getElementById('amount').value = '';
+        document.getElementById('comment').value = '';
+        document.getElementById('date').value = '';
+
+        updateBalance();
+        updateContent('Dashboard');
+    } else {
+        alert('Please fill in all fields.');
+    }
+});
