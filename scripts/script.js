@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 let content = document.getElementById('content');
 let menu = document.querySelectorAll('.menu ul li');
 let storage = JSON.parse(localStorage.getItem('transactions')) || [];
@@ -133,4 +134,14 @@ document.getElementById('submit').addEventListener('click', () => {
     } else {
         alert('Please fill in all fields.');
     }
+});
+function deleteTransaction(index) {
+    if (index > -1) {
+        storage.splice(index, 1);
+        localStorage.setItem('transactions', JSON.stringify(storage));
+
+        updateBalance();
+        updateContent('Transactions');
+    }
+}
 });
