@@ -1,16 +1,134 @@
 document.addEventListener('DOMContentLoaded', () => {
 let content = document.getElementById('content');
 let menu = document.querySelectorAll('.menu ul li');
-let storage = JSON.parse(localStorage.getItem('transactions')) || [];
-let index = storage.length - 1;
+let storage = [];
 let totalIncome = 0;
 let totalExpense = 0;
 let balance = 0;
+let showform = document.getElementById('edit');
+let newform = document.getElementById('input');
+let btnRegister = document.getElementById('RegisterBtn');
+let loginBtn=document.getElementById('loginBtn');
+let loginForm = document.getElementById('login');
+    loginBtn.addEventListener('click',login());
+if (!btnRegister) {
+    console.error('Register button not found!');
+}
+
+if (btnRegister) {
+    btnRegister.addEventListener('click', () => {
+        let divRegister = document.getElementById('divRegister');
+        show(divRegister);
+        divRegister.className = 'login';
+        let signup = document.getElementById('signUp');
+        signup.addEventListener('click',register());
+    });
+}
+
+
+    fetch('http://localhost/Expense/php/getTransaction.php')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        storage = data;
+        updateBalance();
+    })
+    .catch(error => {
+        console.error('Error fetching transactions:', error);
+    });
+
+
+function register(){
+     const fname = document.getElementById('fname');
+        const lname = document.getElementById('lname').value;
+        const username = document.getElementById('Regusername').value;
+        const password = document.getElementById('Regpass').value;
+
+        if (fname && lname && username && password) {
+            const newUser = {
+                fname,
+                lname,
+                username,
+                password
+            };
+
+        fetch('http://localhost/Expense/php/register.php',{
+            method: 'POST',
+            headers:{
+                'Content-type':'application/json'
+            },
+            body:JSON.stringify(transaction)
+        })
+        .then(response =>response.text())
+        .then(data=>{
+        })
+        .catch(error=>{
+            console.error('Error:',error);
+        })
+            updateContent('Dashboard');
+        } else {
+            alert('Please fill in all fields.');
+        }
+    };
+
+
+
+
+function login(){
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        const user = document.getElementById('loginusername').value;
+        const pass = document.getElementById('loginpass').value;
+        if (user && pass) {
+            const users = {
+              user,
+              pass
+            };
+
+        fetch('http://localhost/Expense/php/login.php',{
+            method: 'POST',
+            headers:{
+                'Content-type':'application/json'
+            },
+            body:JSON.stringify(users),
+            mode:'cors'
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log('Response Data:', data);
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert('Login successful');
+                console.log(loginForm);
+                loginForm.classList.add('hide');
+                updateContent('Dashboard');
+            }
+        })
+        .catch(error=>{
+            console.error(error);
+            alert('An error occurred. Please try again.'+error.message);
+        })
+
+        } else {
+            alert('Please fill in all fields.');
+        }
+    });
+}
+
+
 
 function updateBalance() {
     balance = 0;
     totalIncome = 0;
     totalExpense = 0;
+
+    if (storage.length === 0) {
+        return;
+    }
 
     storage.forEach(transaction => {
         if (transaction.type === 'income') {
@@ -21,7 +139,11 @@ function updateBalance() {
             totalExpense += Number(transaction.amount);
         }
     });
+
 }
+
+
+
 menu.forEach((item) => {
     item.addEventListener('click', () => {
         const Selected = item.textContent;
@@ -29,6 +151,8 @@ menu.forEach((item) => {
         updateContent(Selected);
     });
 });
+
+
 
 function updateContent(Selected) {
     if (Selected === 'Dashboard') {
@@ -84,31 +208,58 @@ function updateContent(Selected) {
         storage.forEach((item, index) => {
             const listItem = document.createElement('li');
             listItem.textContent = `${item.description} on ${item.date}: ${item.amount} USD `;
+            listItem.innerHTML += `<i class="fa fa-edit" id="edit-${index}"></i>`;
             listItem.innerHTML += `<i class="fa fa-trash-o btn" id="delete-${index}"></i>`;
             listItem.className = item.type === 'income' ? 'fourth-txt-color' : 'third-txt-color';
             allTransactions.appendChild(listItem);
         });
 
         content.appendChild(allTransactions);
-        content.innerHTML += `<h2 id="add"><a href="index.html">New Transaction</a></h2>`;
+        content.innerHTML += `<h2 id="add" class="btn">New Transaction</h2>`;
         content.className = 'content';
-
+        let add =document.getElementById('add');
+        add.addEventListener('click',()=>{
+            show(newform);
+            content.innerHTML='';
+            content.appendChild(newform);
+            createTransaction();
+        })
         attachButtonListeners();
     }
 }
+
+
+
 function attachButtonListeners() {
     storage.forEach((item, index) => {
         const deleteButton = document.getElementById(`delete-${index}`);
-
+        const editButton = document.getElementById(`edit-${index}`);
         if (deleteButton) {
             deleteButton.addEventListener('click', () => {
-                deleteTransaction(index);
+                deleteTransaction(item.id);
+            });
+        }
+        if (editButton) {
+            editButton.addEventListener('click', () => {
+                show(showform);
+                content.innerHTML='';
+                content.appendChild(showform);
+                editTransaction(item);
             });
         }
     });
 }
 
-document.getElementById('submit').addEventListener('click', () => {
+
+
+function show(element){
+    element.classList.remove('hide');
+}
+
+
+
+function createTransaction(){
+document.getElementById('submitadd').addEventListener('click', () => {
     const selectedMethod = document.querySelector('input[name="trans-method"]:checked');
     const amount = document.getElementById('amount').value;
     const description = document.getElementById('comment').value;
@@ -122,8 +273,20 @@ document.getElementById('submit').addEventListener('click', () => {
             date: date,
         };
 
-        storage.push(transaction);
-        localStorage.setItem('transactions', JSON.stringify(storage));
+    fetch('http://localhost/Expense/php/addTransaction.php',{
+        method: 'POST',
+        headers:{
+            'Content-type':'application/json'
+        },
+        body:JSON.stringify(transaction)
+    })
+    .then(response =>response.text())
+    .then(data=>{
+    })
+    .catch(error=>{
+        console.error('Error:',error);
+    })
+
 
         document.getElementById('amount').value = '';
         document.getElementById('comment').value = '';
@@ -135,13 +298,89 @@ document.getElementById('submit').addEventListener('click', () => {
         alert('Please fill in all fields.');
     }
 });
+}
+
+
+
 function deleteTransaction(index) {
-    if (index > -1) {
-        storage.splice(index, 1);
-        localStorage.setItem('transactions', JSON.stringify(storage));
+    fetch(`http://localhost/Expense/php/deleteTransaction.php?index=${index}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateBalance();
+        })
+        .catch(error => {
+            console.error('Error fetching transactions:');
+        });
+
 
         updateBalance();
         updateContent('Transactions');
-    }
 }
+
+
+
+function editTransaction(item) {
+    let editAmount = document.getElementById('editAmount');
+    let editComment = document.getElementById('editComment');
+    let editDate = document.getElementById('editDate');
+    let editType = document.querySelectorAll('input[name="edittrans-method"]');
+
+    if (editAmount) {
+        editAmount.value = item.amount;
+    }
+    if (editComment) {
+        editComment.value = item.description;
+    }
+    if (editDate) {
+        editDate.value = item.date;
+    }
+
+    editType.forEach(radio => {
+        if (radio.value === item.type) {
+            radio.checked = true;
+        }
+    });
+
+    document.getElementById('submitedit').addEventListener('click', () => {
+        const type = document.querySelector('input[name="edittrans-method"]:checked');
+        const amount = editAmount.value;
+        const description = editComment.value;
+        const date = editDate.value;
+
+        if (type && amount && description && date) {
+            const transaction = {
+                id: item.id,
+                type: type.value,
+                amount: parseFloat(amount),
+                description: description,
+                date: date,
+            };
+
+            fetch('http://localhost/Expense/php/editTransaction.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transaction)
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                updateBalance();
+                updateContent('Dashboard');
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        } else {
+            alert('Please fill in all fields.');
+        }
+    });
+}
+
 });

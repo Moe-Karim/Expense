@@ -29,7 +29,7 @@ body{
 .content{
     background-color: #fefafa8e;
     border-radius: 10px;
-    height: 80vh;
+    height: 95vh;
     width: 60vw;
     transition: all 0.7s;
 }
@@ -86,4 +86,71 @@ body{
 .btn:hover {
     color: #ced8f1;
     cursor: pointer;
+}
+.hide{
+display:none;
+}
+.login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.868); /* Dark background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.login-content {
+    background: #CED8F1;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 300px;
+    text-align: center;
+
+}
+.login-content span {
+    float: left;
+    font-size: 14px;
+}
+
+.login-content input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #fefafa8e;
+    border-radius: 10px;
+
+}
+
+.login-content input[type=submit] {
+    width: 90%;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #fefafa8e;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.7s;
+
+}
+
+.login-content input[type=submit]:hover {
+    background-color: #CED8F1;
+}
+.login-content button {
+    max-width: fit-content;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #fefafa8e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.7s;
+
+}
+
+.login-content button:hover {
+    background-color: #CED8F1;
 }
